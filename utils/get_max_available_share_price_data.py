@@ -64,7 +64,7 @@ def get_max_available_share_price_data(
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
 
-        file_name = f"{target_ticker}_{interval}_max_{datetime.now():%Y%m%d_%H%M%S}.csv"
+        file_name = f"{target_ticker}_{interval}_{period}_{datetime.now():%Y%m%d_%H%M%S}.csv"
         csv_file_path = output_path / file_name
         data.to_csv(csv_file_path)
 
