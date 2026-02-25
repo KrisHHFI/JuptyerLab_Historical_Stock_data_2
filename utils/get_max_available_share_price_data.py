@@ -4,7 +4,13 @@ import time
 
 import yfinance as yf
 
-from constants import CALL_DELAY_SECONDS, CALL_LIMIT, INTERVAL, TARGET_TICKER
+from constants import (
+    CALL_DELAY_SECONDS,
+    CALL_LIMIT,
+    INTERVAL,
+    OUTPUT_DIR,
+    TARGET_TICKER,
+)
 from utils.build_call_record import build_call_record
 from utils.enforce_call_limit import enforce_call_limit
 from utils.print_header import print_header
@@ -16,7 +22,7 @@ def get_max_available_share_price_data(
     interval: str = INTERVAL,
     delay_seconds: float = CALL_DELAY_SECONDS,
     call_limit: int = CALL_LIMIT,
-    output_dir: str = "downloads",
+    output_dir: str = OUTPUT_DIR,
 ):
     max_period_by_interval = {
         "1m": "7d",

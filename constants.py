@@ -8,3 +8,5 @@ CALL_DELAY_SECONDS: float = 1.0
 # Examples: 0.5, 1.0, 2.0
 CALL_LIMIT: int = 20
 # Examples: 5, 20, 100
+OUTPUT_DIR: str = "/Users/kristopherpepper/Documents/jupyterProjects/historicalStockTrader/raw_data"
+# Absolute directory where CSV exports are saved.

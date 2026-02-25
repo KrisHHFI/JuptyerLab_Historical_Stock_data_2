@@ -26,7 +26,7 @@ historicalStockDataDownload/
 ├── AGENTS.md
 ├── constants.py
 ├── main.ipynb
-├── downloads/                  # generated CSV outputs (git-ignored)
+├── downloads/                  # legacy generated CSV outputs (git-ignored)
 └── utils/
     ├── __init__.py
     ├── build_call_record.py
@@ -41,3 +41,4 @@ historicalStockDataDownload/
 
 - `main.ipynb` is the main execution entry for this project.
 - Utility logic is separated under `utils/` using the one-function-per-file convention.
+- Current CSV exports are written to `/Users/kristopherpepper/Documents/jupyterProjects/historicalStockTrader/raw_data` via `OUTPUT_DIR` in `constants.py`.
