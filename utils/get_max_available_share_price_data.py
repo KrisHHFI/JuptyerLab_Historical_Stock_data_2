@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 import time
+from typing import Final
 
 import yfinance as yf
 
@@ -9,22 +10,27 @@ from constants import (
     CALL_LIMIT,
     INTERVAL,
     OUTPUT_DIR,
-    TARGET_TICKER,
+    TARGET_TICKERS,
 )
 from utils.build_call_record import build_call_record
+from utils.call_record_types import CallRecord
 from utils.enforce_call_limit import enforce_call_limit
-from utils.print_header import print_header
 from utils.print_calls_made import print_calls_made
 
 
 def get_max_available_share_price_data(
-    target_ticker: str = TARGET_TICKER,
+    target_ticker: str | None = None,
     interval: str = INTERVAL,
     delay_seconds: float = CALL_DELAY_SECONDS,
     call_limit: int = CALL_LIMIT,
     output_dir: str = OUTPUT_DIR,
-):
-    max_period_by_interval = {
+) -> tuple[Path | None, list[CallRecord]]:
+    if target_ticker is None:
+        if not TARGET_TICKERS:
+            raise ValueError("TARGET_TICKERS must include at least one ticker.")
+        target_ticker = TARGET_TICKERS[0]
+
+    max_period_by_interval: Final[dict[str, str]] = {
         "1m": "7d",
         "2m": "60d",
         "5m": "60d",
@@ -41,7 +47,7 @@ def get_max_available_share_price_data(
     }
     period = max_period_by_interval.get(interval, "60d")
 
-    calls_made = []
+    calls_made: list[CallRecord] = []
 
     enforce_call_limit(calls_made_count=len(calls_made), call_limit=call_limit)
 
@@ -52,11 +58,6 @@ def get_max_available_share_price_data(
         delay_seconds=delay_seconds,
     )
     calls_made.append(call_record)
-
-    print_header("REQUEST")
-    print(
-        f"CALL 1: yf.Ticker('{target_ticker}').history(period='{period}', interval='{interval}', auto_adjust=False)"
-    )
 
     try:
         time.sleep(delay_seconds)
@@ -79,18 +80,10 @@ def get_max_available_share_price_data(
         calls_made[-1]["interval"] = interval
         calls_made[-1]["csv_path"] = str(csv_file_path)
 
-        print_header("RESULT")
-        print(
-            f"SUCCESS: Downloaded {len(data)} rows for {target_ticker} at interval '{interval}'."
-        )
-        print(f"CSV saved to: {csv_file_path.resolve()}")
-
     except Exception as error:
         calls_made[-1]["status"] = "failure"
         calls_made[-1]["error"] = str(error)
         csv_file_path = None
-        print_header("RESULT")
-        print(f"FAILURE: {error}")
 
     print_calls_made(calls_made)
     return csv_file_path, calls_made

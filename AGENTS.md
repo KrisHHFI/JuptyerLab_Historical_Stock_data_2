@@ -18,6 +18,11 @@
    - Do not repeatedly establish a new notebook kernel or Python environment when one is already active and working.
    - Only restart or reconfigure the kernel/environment when there is a concrete execution/import failure that requires it.
 
+5. **Strict typing and diagnostics are required**
+   - Treat Pylance type warnings/errors as blockers for new or changed code.
+   - Add explicit function return types and typed collections (avoid untyped `dict`/`list` in new logic).
+   - Validate both runtime execution and static diagnostics before considering work complete.
+
 ## Project Architecture
 
 ```text
@@ -32,7 +37,6 @@ historicalStockDataDownload/
     ├── build_call_record.py
    ├── enforce_call_limit.py
    ├── get_max_available_share_price_data.py
-   ├── plot_compressed_trading_chart.py
    ├── print_header.py
     └── print_calls_made.py
 ```
